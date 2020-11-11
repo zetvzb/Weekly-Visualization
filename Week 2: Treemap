@@ -1,0 +1,21 @@
+#Identifying Normalized War by Position
+
+Position <- read.csv("WAR by Position.csv", header=TRUE)
+
+
+library(treemap)
+
+Position = subset(Position, Normalized.WAR >0)
+Position$League = ifelse(Position$Team %in% c("Cardinals", "Brewers", "Cubs", 'Reds', "Pirates", "Mets", "Nationals", "Dodgers", "Marlins", 
+                                            "Braves", "Phillies", "Dodgers", "Giants", "Padres", "Rockies", "Diamondbacks"), "NL", "AL")
+
+Position =subset(Position, League == "NL")
+
+treemap(Position, 
+        index=c("Pos","Name"), 
+        vSize = "Normalized.WAR", 
+        type="index", #Type sets the organization and color scheme of your treemap
+        palette = "Blues",  #Select your color palette from the RColorBrewer presets or make your own.
+        title="WAR by Position National League", #Customize your title
+        fontsize.title = 14 #Change the font size of the title
+)
