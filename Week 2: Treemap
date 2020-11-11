@@ -1,4 +1,3 @@
-#Identifying Normalized War by Position
 
 Position <- read.csv("WAR by Position.csv", header=TRUE)
 
@@ -10,12 +9,38 @@ Position$League = ifelse(Position$Team %in% c("Cardinals", "Brewers", "Cubs", 'R
                                             "Braves", "Phillies", "Dodgers", "Giants", "Padres", "Rockies", "Diamondbacks"), "NL", "AL")
 
 Position =subset(Position, League == "NL")
+Position = subset(Position, Pos != "P")
 
 treemap(Position, 
         index=c("Pos","Name"), 
         vSize = "Normalized.WAR", 
-        type="index", #Type sets the organization and color scheme of your treemap
+        vColor = 'Normalized.WAR',
+        type="manual", #Type sets the organization and color scheme of your treemap
         palette = "Blues",  #Select your color palette from the RColorBrewer presets or make your own.
-        title="WAR by Position National League", #Customize your title
-        fontsize.title = 14 #Change the font size of the title
+        title="2018 WAR by Position National League", #Customize your title
+        fontsize.title = 14,#Change the font size of the title
+        title.legend = "Normalized WAR",
+        algorithm = "squarified" #Sorting order
+        
 )
+
+#For more information please visit the following link. 
+#The available syntax for the treemap function is listed below. 
+
+#https://rdrr.io/cran/treemap/man/treemap.html
+
+#treemap(dtf, index, vSize, vColor = NULL, stdErr = NULL, type = "index",
+#fun.aggregate = "sum", title = NA, title.legend = NA,
+#algorithm = "pivotSize", sortID = "-size", mirror.x = FALSE,
+#mirror.y = FALSE, palette = NA, palette.HCL.options = NULL,
+#range = NA, mapping = NA, n = 7, fontsize.title = 14,
+#fontsize.labels = 11, fontsize.legend = 12, fontcolor.labels = NULL,
+#fontface.labels = c("bold", rep("plain", length(index) - 1)),
+#fontfamily.title = "sans", fontfamily.labels = "sans",
+#fontfamily.legend = "sans", border.col = "black",
+#border.lwds = c(length(index) + 1, (length(index) - 1):1),
+#lowerbound.cex.labels = 0.4, inflate.labels = FALSE, bg.labels = NULL,
+#force.print.labels = FALSE, overlap.labels = 0.5,
+#align.labels = c("center", "center"), xmod.labels = 0, ymod.labels = 0,
+#eval.labels = FALSE, position.legend = NULL, format.legend = NULL,
+#drop.unused.levels = TRUE, aspRatio = NA, vp = NULL, draw = TRUE, ...)
