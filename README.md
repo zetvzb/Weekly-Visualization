@@ -1,5 +1,5 @@
-# Weekly-Visualization
-Weekly Visualization Blogdown
+# Weekly-Visualization Blog
+Weekly Visualization Blogdown by Zach Tallevast zetvzb@gmail.com
 
 ## Week 1: Rain Cloud Viz
 Identifying differences in miles traveled by frequent flyers grouped by airline type. 
