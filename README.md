@@ -9,4 +9,5 @@ Identifying differences in miles traveled by frequent flyers grouped by airline 
 ## Week 2: Treemap Viz
 Identifying Normalized WAR for 2018 MLB Season by Player Position 
 ![Week_2_Treemap](https://user-images.githubusercontent.com/32825422/98833065-348ba180-2403-11eb-9498-1a53bb96e5f4.png)
+
 *data provided by https://www.fangraphs.com/*
