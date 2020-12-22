@@ -1,0 +1,156 @@
+
+gtcars %>%
+  dplyr::filter(hp >= 600) %>%
+  dplyr::group_by(ctry_origin) %>%
+  dplyr::arrange(desc(hp)) %>%
+  gt() %>%
+  #Format the MSRP column as currency
+  fmt_currency(columns = c(15), decimals = 0, use_seps = TRUE) %>%
+  #Add Tab Spanner Label for Vehicle MFR, Model, Year called "Vehicle Description"
+  tab_spanner(label = "Vehicle Description", columns = c(1,2,3)) %>%
+  tab_spanner(label = "Vehicle Specifications",  columns = vars(hp, hp_rpm, trq, trq_rpm, mpg_c, mpg_h, drivetrain, trsmn)) %>%
+  tab_spanner(label = "Vehicle Price", columns = c(15)) %>%
+  #Hide Transmission Column 
+  cols_hide(columns = vars(trim, bdy_style)) %>%
+  #Merge Columns hp and hp_rpm
+  cols_merge(
+    vars(hp, hp_rpm),
+    hide_columns = vars(hp_rpm),
+    pattern = "{1}<br>@{2}rpm"
+  ) %>%
+  #Merge Columns trq, trq_rpm
+  cols_merge(
+    vars(trq, trq_rpm),
+    hide_columns = vars(trq_rpm),
+    pattern = "{1}<br>@{2}rpm"
+  ) %>% 
+  #Rename Columns
+  cols_label(
+    mfr = 'Manufacturer', 
+    model = 'Model',
+    mpg_c = "MPG City",
+    mpg_h = "MPG HWY",
+    hp = "Horsepower",
+    trq = "Torque",
+    year = "Year",
+    drivetrain = 'Drivetrain',
+    trsmn = "Transmission",
+    msrp = "MSRP"
+  ) %>%
+  #Re-Align Columns
+  cols_align(
+    align = "center", 
+    columns = everything()
+  ) %>%
+  #Transform Drivetrain and Transmission Verbiage 
+  #The Transmission Syntax is utilized from the following post: https://gt.rstudio.com/articles/case-study-gtcars.html
+  text_transform(
+    locations = cells_body(columns = vars(trsmn)),
+    fn = function(x) {
+      
+      speed <- substr(x, 1, 1)
+      
+      trans <-
+        dplyr::case_when(
+          substr(x, 2, 2) == "m" ~ "Manual",
+          substr(x, 2, 2) == "a" ~ "Automatic",
+        )
+      
+      paste(speed, " Speed<br><em>", trans, "</em>")
+    }
+  ) %>%
+  text_transform(
+    locations = cells_body(columns = vars(drivetrain)), 
+    fn = function(y){
+      drive <- 
+        dplyr::case_when(
+          y == "rwd" ~ "RWD", 
+          y == "awd" ~ "AWD"
+        )
+      paste(drive)
+    }
+  ) %>%
+  tab_header(
+    title = md("600HP+ Vehicles by Manufacturer"),
+    subtitle = "Auto Specifications"
+  ) %>%
+  tab_source_note(
+    source_note = md(
+      "Source: Deluxe Automobiles From The 2014-2017 Period. Utilizes **gtcars** package. Table Produced by Zach Tallevast")
+  ) %>%
+  tab_footnote(
+    footnote = "Prices shown in U.S. Dollars (USD).",
+    locations = cells_column_labels(columns = vars(msrp))
+  ) %>% 
+  tab_style(
+    style = cell_text(size = px(12)),
+    locations = cells_body(
+      columns = vars(hp, hp_rpm, trq, trq_rpm, mpg_c, mpg_h, drivetrain, trsmn)
+    )) %>%
+  tab_style(
+    style = list(cell_borders(sides = "right",color = "black",style = "dotted", weight = px(1.5))),
+    locations = list(cells_body(columns = c("year"))
+    )) %>%
+  tab_style(
+    style = list(cell_borders(sides = "left",color = "black",style = "dotted", weight = px(1.5))),
+    locations = list(cells_body(columns = c("msrp"))
+    )) %>%
+  tab_style(
+    style = list(cell_text(style = "italic", weight = "bold")),
+    locations = cells_column_spanners(spanners = 1)
+  ) %>%
+  tab_style(
+    style = list(cell_text(style = "italic", weight = "bold")),
+    locations = cells_column_spanners(spanners = 2)
+  ) %>%
+  tab_style(
+    style = list(cell_text(style = "italic", weight = "bold")),
+    locations = cells_column_spanners(spanners = 3)
+  ) %>%
+  tab_options(
+    container.overflow.x = NULL,
+    container.overflow.y = NULL,
+    table.font.names = 'arial',
+    table.font.size = '15px', 
+    table.font.color = "#323232",
+    table.border.top.color = 'black',
+    table.border.top.width = '1.5px',
+    table.border.top.style = "solid",
+    table.border.right.style = "solid",
+    table.border.right.width = '1.5px',
+    table.border.right.color = "black",
+    table.border.bottom.color = "black",
+    table.border.bottom.width = '1.5px',
+    table.border.bottom.style = "solid",
+    table.border.left.style = "solid",
+    table.border.left.width = '1.5px',
+    table.border.left.color = "black",
+    heading.background.color = "#EFFBFC",
+    heading.align = "center", 
+    heading.title.font.size = '20px',
+    heading.subtitle.font.size = '15px',
+    heading.border.bottom.style = "solid",
+    heading.border.bottom.width = '1.5px',
+    heading.border.bottom.color = "black",
+    heading.border.lr.style = "solid",
+    heading.border.lr.color = "black",
+    heading.border.lr.width = '1.5px',
+    column_labels.background.color = "#EFFBFC",
+    column_labels.font.size ='15px',
+    column_labels.border.top.style = 'solid',
+    column_labels.border.top.width = '1.5px',
+    column_labels.border.top.color = 'black',
+    column_labels.border.bottom.style = 'solid',
+    column_labels.border.bottom.color = 'black',
+    row_group.padding = '5px',
+    table_body.border.top.style = "solid",
+    table_body.border.top.width = '1.5px',
+    table_body.border.top.color = "black",
+    table_body.border.bottom.style = "solid",
+    table_body.border.bottom.width = '1.5px',
+    table_body.border.bottom.color = "black",
+    stub.font.size = '14px',
+    source_notes.background.color = "white",
+    source_notes.font.size ='11px'
+    
+  )
