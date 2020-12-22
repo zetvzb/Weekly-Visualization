@@ -14,5 +14,5 @@ Identifying Normalized WAR for 2018 MLB Season by Player Position
 
 ## Week 3: gt Table 600HP+ gtcars
 Visualizing built in gt dataset *gtcars* using the gt package
-![Week_3 gt Table](https://user-images.githubusercontent.com/32825422/98833065-348ba180-2403-11eb-9498-1a53bb96e5f4.png)
+![600HP+ Vehicles by Manufacturer](https://user-images.githubusercontent.com/32825422/102916096-9e5a8a80-4448-11eb-818c-e7a69d99e178.png)
 *data provided by gtcars dataset in gt package*
